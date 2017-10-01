@@ -1,5 +1,5 @@
 ﻿# Btree-Dictionary
-
+Dictionary program utilizing b-tree structure 
 ## Build
 
 Install ncurses library for Linux
