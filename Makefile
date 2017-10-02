@@ -18,7 +18,7 @@ $(EXEC): $(OBJECTS)
 	$(CC) -c $(CC_FLAGS) $< -o $@ $(LIBS)
  
 data: btfile.c
-	$(cc) -o btfile btfile.c $(LIBS)
+	$(CC) -o btfile btfile.c $(LIBS)
 # To remove generated files
 clean:
 	rm -f $(EXEC) *.o
