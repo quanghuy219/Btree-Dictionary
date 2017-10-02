@@ -22,6 +22,8 @@ int main()
 
 	while (select != 0) {
 		printf("1. Search \n");
+		printf("2. Add\n");
+		printf("3. Delete\n");
 		printf("0. Quit \n");
 		scanf("%d",&select);
 		while( getchar() != '\n' );
@@ -29,6 +31,12 @@ int main()
 		switch(select) {
 			case 1: 
 				search(dict, soundExTree);
+				break;
+			case 2: 
+				add(dict, soundExTree);
+				break;
+			case 3: 
+				delete(dict, soundExTree);
 				break;
 			case 0: 
 				break; 

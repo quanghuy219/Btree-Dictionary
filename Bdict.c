@@ -5,14 +5,14 @@
 #include <ncurses.h>
 
 #include "model_lib.h"
+#include "extio.h"
 
 #define MAX_LEN_WORD 40
 #define MAX_LEN_MEAN 2000
 #define MAX 2000
 
-void soundex(BTA *soundExTree, char *word) {
+void findSuggestion(BTA *soundExTree, char *word) {
 	
-	char soundex[5];
 	char suggestion_str[10][MAX_LEN_WORD];
 
 	int size = suggestion(soundExTree, word, suggestion_str);
@@ -34,7 +34,7 @@ void searchWord(BTA *dict, BTA *soundExTree, char *word, char *mean) {
 
 	if(val == 1) printf("%s\n", mean);
 
-	else soundex(soundExTree, word);
+	else findSuggestion(soundExTree, word);
 
 }
 
@@ -66,4 +66,58 @@ void search(BTA *dict, BTA *soundExTree) {
 		getchar();
 		searchWord(dict, soundExTree, word, mean);
 	}
+}
+
+void add(BTA *dict, BTA *soundExTree) {
+	char word[MAX_LEN_WORD];
+	char mean[MAX_LEN_MEAN];
+	printf("Word: \n");
+	
+	int checkEmptyWord = getStr(word);
+	if(checkEmptyWord == 0) {
+		printf("Exit\n");
+		return;
+	}
+
+	int exist = findWord(dict, word, mean);
+
+	if(exist == 1) printf("Word '%s' exist \n", word);
+
+	else {
+		printf("Meaning: \n");
+		
+		while(getStr(mean) == 0);
+
+		int adddict = addToDict(dict, word, mean);
+		int addSound = addToSoundExTree(soundExTree, word);
+		if (adddict == 0 ) printf("Added '%s' to dictionary\n",word);
+		else printf("Insertion error to dictionary\n");
+		if(addSound == 0 ) printf("Added '%s' to soundExTree\n",word);
+		else printf("Insertion error to soundExTree\n");
+		
+	}
+}
+
+void delete(BTA *dict, BTA *soundExTree) {
+	char word[MAX_LEN_WORD];
+	char mean[MAX_LEN_MEAN];
+
+	printf("Delete word: ");
+	getStr(word);
+
+	int exist = findWord(dict, word, mean);
+
+	if (exist == 0) printf("Word not found\n");
+
+	else {
+		int deleteDict = deleteInDict(dict, word);
+		int deleteSoundExTree = deleteInSoundExTree(soundExTree, word);
+
+		if(deleteDict == 0) printf("%s deleted in dictionary\n",word);
+		else printf("Delete in dictionary error\n");
+
+		if (deleteSoundExTree == 0) printf("%s deleted in soundExTree\n",word );
+		else printf("Delete in soundExTree error\n");
+	}
+
 }

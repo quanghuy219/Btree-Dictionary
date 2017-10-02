@@ -89,3 +89,23 @@ int suggestion(BTA *soundExTree, char* word, char suggestion[][MAX_LEN_WORD]) {
 	}
 	return size;
 }
+
+int addToDict(BTA *dict, char *word, char *mean) {
+	return btins(dict, word, mean, MAX_LEN_MEAN * sizeof(char));
+}
+
+int addToSoundExTree(BTA *soundExTree, char *word) {
+	char soundex[5];
+
+	SoundEx(soundex, word, 4,1);
+
+	return btins(soundExTree, word, soundex, 5 * sizeof(char));
+}
+
+int deleteInDict(BTA *dict, char *word) {
+	return btdel(dict, word);
+}
+
+int deleteInSoundExTree(BTA *soundExTree, char *word) {
+	return btdel(soundExTree, word);
+}

@@ -1,0 +1,1 @@
+int getStr(char *word);

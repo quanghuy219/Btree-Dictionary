@@ -26,3 +26,8 @@ int get_word(char *word);
 ** return max - 10 suggession of @param word
 */
 int suggestion(BTA *soundExTree, char* word, char suggestion[][MAX_LEN_WORD]);
+
+int addToDict(BTA *dict, char *word, char *mean);
+int addToSoundExTree(BTA *soundExTree, char *word);
+int deleteInDict(BTA *dict, char *word);
+int deleteInSoundExTree(BTA *soundExTree, char *word);
