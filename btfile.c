@@ -41,11 +41,12 @@ void split_word(char *word, char* mean) {
 	}
 }
 
-int createBdict(FILE* fi,BTA* dict) {
+int createBdict(FILE* fi,BTA* dict, BTA *soundExTree) {
 	int count = 0;
 	char word[MAX_WORD];
 	char data[MAX_DATA];
 	char buff[MAX_DATA];
+	char soundex[5];
 	int val;
 
 	while(!feof(fi)) {
@@ -61,7 +62,8 @@ int createBdict(FILE* fi,BTA* dict) {
 		correct(data);
 		if(strlen(word) != 0 && strlen(data) != 0) {
 			val = btins(dict, word, data, MAX * sizeof(char));
-			
+			SoundEx(soundex, word, 4,1);
+			btins(soundExTree, word, soundex, 5 * sizeof(char));
 		}
 		count++;
 		if (buff[0] == '@')
@@ -77,21 +79,6 @@ int createBdict(FILE* fi,BTA* dict) {
 	return count;
 }
 
-int createSoundExTree(BTA *dict, BTA *soundExTree) {
-	char word[MAX_LEN_WORD];
-	char mean[MAX_LEN_MEAN];
-	int rsize;
-	int count = 0;
-	char soundex[5];
-
-	btsel(dict,"", mean, MAX_LEN_MEAN *sizeof(char), &rsize);
-	while(  btseln(dict,word, mean, MAX_LEN_MEAN * sizeof(char), &rsize) == 0 ) {
-		SoundEx(soundex, word,4,1);
-		btins(soundExTree, word, soundex, 5 * sizeof(char));
-		count++;
-	}
-	return count;
-}
 
 int main()
 {
@@ -106,12 +93,11 @@ int main()
 		return 0;
 	}
 
-	int words = createBdict(f1,dict);
+	int words = createBdict(f1,dict, soundExTree);
 	printf("Words inserted: %d\n", words);
-	
-	createSoundExTree(dict, soundExTree);
 
 	fclose(f1);
 	btcls(dict);
+	btcls(soundExTree);
 	return 0;
 }
